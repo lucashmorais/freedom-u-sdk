@@ -201,7 +201,7 @@ buildroot_initramfs_sysroot: $(buildroot_initramfs_sysroot)
 vmlinux: $(vmlinux)
 bbl: $(bbl)
 spike: $(spike)
-qemu: $(qemu)
+qemu-build: $(qemu)
 rootfs: $(rootfs)
 
 .PHONY: clean
