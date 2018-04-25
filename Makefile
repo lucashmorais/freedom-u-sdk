@@ -78,7 +78,7 @@ $(toolchain_dest)/bin/$(target)-gcc: $(toolchain_srcdir)
 	sed 's/^#define LINUX_VERSION_CODE.*/#define LINUX_VERSION_CODE 263682/' -i $(toolchain_dest)/sysroot/usr/include/linux/version.h
 
 $(buildroot_initramfs_wrkdir)/.config: $(buildroot_srcdir)
-	rm -rf $(dir $@)
+	#rm -rf $(dir $@)
 	mkdir -p $(dir $@)
 	cp $(buildroot_initramfs_config) $@
 	$(MAKE) -C $< RISCV=$(RISCV) PATH=$(PATH) O=$(buildroot_initramfs_wrkdir) olddefconfig
@@ -93,7 +93,7 @@ buildroot_initramfs-menuconfig: $(buildroot_initramfs_wrkdir)/.config $(buildroo
 	cp $(dir $<)/defconfig conf/buildroot_initramfs_config
 
 $(buildroot_rootfs_wrkdir)/.config: $(buildroot_srcdir)
-	rm -rf $(dir $@)
+	#rm -rf $(dir $@)
 	mkdir -p $(dir $@)
 	cp $(buildroot_rootfs_config) $@
 	$(MAKE) -C $< RISCV=$(RISCV) PATH=$(PATH) O=$(buildroot_rootfs_wrkdir) olddefconfig
@@ -146,7 +146,7 @@ linux-menuconfig: $(linux_wrkdir)/.config
 	cp $(dir $<)/defconfig conf/linux_defconfig
 
 $(bbl): $(pk_srcdir) $(vmlinux_stripped)
-	rm -rf $(pk_wrkdir)
+	#rm -rf $(pk_wrkdir)
 	mkdir -p $(pk_wrkdir)
 	cd $(pk_wrkdir) && $</configure \
 		--host=$(target) \
@@ -162,7 +162,7 @@ $(hex):	$(bin)
 	xxd -c1 -p $< > $@
 
 $(libfesvr): $(fesvr_srcdir)
-	rm -rf $(fesvr_wrkdir)
+	#rm -rf $(fesvr_wrkdir)
 	mkdir -p $(fesvr_wrkdir)
 	mkdir -p $(dir $@)
 	cd $(fesvr_wrkdir) && $</configure \
@@ -172,7 +172,7 @@ $(libfesvr): $(fesvr_srcdir)
 	touch -c $@
 
 $(spike): $(spike_srcdir) $(libfesvr)
-	rm -rf $(spike_wrkdir)
+	#rm -rf $(spike_wrkdir)
 	mkdir -p $(spike_wrkdir)
 	mkdir -p $(dir $@)
 	cd $(spike_wrkdir) && $</configure \
@@ -183,7 +183,7 @@ $(spike): $(spike_srcdir) $(libfesvr)
 	touch -c $@
 
 $(qemu): $(qemu_srcdir)
-	rm -rf $(qemu_wrkdir)
+	#rm -rf $(qemu_wrkdir)
 	mkdir -p $(qemu_wrkdir)
 	mkdir -p $(dir $@)
 	cd $(qemu_wrkdir) && $</configure \
@@ -196,10 +196,13 @@ $(qemu): $(qemu_srcdir)
 $(rootfs): $(buildroot_rootfs_ext)
 	cp $< $@
 
-.PHONY: buildroot_initramfs_sysroot vmlinux bbl
+.PHONY: buildroot_initramfs_sysroot vmlinux bbl spike qemu rootfs
 buildroot_initramfs_sysroot: $(buildroot_initramfs_sysroot)
 vmlinux: $(vmlinux)
 bbl: $(bbl)
+spike: $(spike)
+qemu: $(qemu)
+rootfs: $(rootfs)
 
 .PHONY: clean
 clean:
