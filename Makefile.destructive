@@ -200,11 +200,15 @@ $(rootfs): $(buildroot_rootfs_ext)
 buildroot_initramfs_sysroot: $(buildroot_initramfs_sysroot)
 vmlinux: $(vmlinux)
 bbl: $(bbl)
+rootfs: $(rootfs)
 qemu-build: $(qemu)
 
-.PHONY: clean
+.PHONY: clean clean-minimal
 clean:
 	rm -rf -- $(wrkdir) $(toolchain_dest)
+
+clean-minimal:
+	rm -rf -- $(linux_wrkdir) $(pk_wrkdir) $(buildroot_initramfs_wrkdir) $(buildroot_initramfs_sysroot) $(buildroot_rootfs_wrkdir) $(rootfs) $(buildroot_initramfs_sysroot_stamp)
 
 .PHONY: sim
 sim: $(spike) $(bbl)
