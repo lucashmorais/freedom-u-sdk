@@ -24,3 +24,4 @@
                      5
 
            SiFive RISC-V Coreplex
+         --===  BSC Flavor ===--
