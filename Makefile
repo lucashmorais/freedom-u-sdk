@@ -203,12 +203,15 @@ bbl: $(bbl)
 rootfs: $(rootfs)
 qemu-build: $(qemu)
 
-.PHONY: clean clean-minimal
+.PHONY: clean clean-minimal clean-bbl
 clean:
 	rm -rf -- $(wrkdir) $(toolchain_dest)
 
 clean-minimal:
 	rm -rf -- $(linux_wrkdir) $(pk_wrkdir) $(buildroot_initramfs_wrkdir) $(buildroot_initramfs_sysroot) $(buildroot_rootfs_wrkdir) $(rootfs) $(buildroot_initramfs_sysroot_stamp)
+
+clean-bbl:
+	rm -rf -- $(rootfs.bin) $(buildroot_initramfs_sysroot) $(pk_wrkdir) $(linux_wrkdir)/vmlinux.o $(linux_wrkdir)/.tmp_vm* $(linux_wrkdir)/vmlinux $(linux_wrkdir)/vmlinux-stripped $(linux_wrkdir)/usr/
 
 .PHONY: sim
 sim: $(spike) $(bbl)
