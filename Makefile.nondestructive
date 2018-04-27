@@ -204,18 +204,11 @@ spike: $(spike)
 qemu-build: $(qemu)
 rootfs: $(rootfs)
 
-.PHONY: clean clean-rootfs clean-initramfs clean-bbl
+.PHONY: clean
 clean:
 	rm -rf -- $(wrkdir) $(toolchain_dest)
 
-clean-rootfs:
-	rm -rf -- $(buildroot_rootfs_wrkdir)
 
-clean-initramfs:
-	rm -rf -- $(buildroot_initramfs_wrkdir)
-
-clean-bbl:
-	rm -rf -- $(pk_wrkdir)
 
 .PHONY: sim
 sim: $(spike) $(bbl)
