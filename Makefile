@@ -211,9 +211,10 @@ clean:
 clean-filesystems:
 	rm -rf -- $(rootfs) $(buildroot_initramfs_sysroot)
 	cd $(pk_wrkdir) && rm -rf bbl libbbl.a payload.o bbl_payload
-	cd $(linux_wrkdir) && rm -rf bbl libbbl.a payload.o bbl_payload && cd usr && rm $(dir -A -I gen_init_cpio)
-	cd $(buildroot_initramfs_wrkdir) && rm -rf $(dir -A1 . | grep config) images
-	cd $(buildroot_rootfs_wrkdir) && rm -rf $(dir -A1 . | grep config) images
+	cd $(linux_wrkdir) && rm .tmp_vm* vml*
+	cd $(linux_wrkdir)/usr && rm -rf $$(dir -A1 -I gen_init_cpio)
+	cd $(buildroot_initramfs_wrkdir) && rm -rf $$(dir -A1 | grep config) images
+	cd $(buildroot_rootfs_wrkdir) && rm -rf $$(dir -A1 | grep config) images
 
 clean-minimal:
 	rm -rf -- $(linux_wrkdir) $(pk_wrkdir) $(buildroot_initramfs_wrkdir) $(buildroot_initramfs_sysroot) $(buildroot_rootfs_wrkdir) $(rootfs) $(buildroot_initramfs_sysroot_stamp)
