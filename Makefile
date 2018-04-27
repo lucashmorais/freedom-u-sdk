@@ -196,16 +196,24 @@ $(qemu): $(qemu_srcdir)
 $(rootfs): $(buildroot_rootfs_ext)
 	cp $< $@
 
-.PHONY: buildroot_initramfs_sysroot vmlinux bbl qemu-build
+.PHONY: buildroot_initramfs_sysroot vmlinux bbl spike qemu-build rootfs
 buildroot_initramfs_sysroot: $(buildroot_initramfs_sysroot)
 vmlinux: $(vmlinux)
 bbl: $(bbl)
-rootfs: $(rootfs)
+spike: $(spike)
 qemu-build: $(qemu)
+rootfs: $(rootfs)
 
-.PHONY: clean clean-minimal clean-bbl
+.PHONY: clean clean-minimal clean-bbl clean-filesystems
 clean:
 	rm -rf -- $(wrkdir) $(toolchain_dest)
+
+clean-filesystems:
+	rm -rf -- $(rootfs) $(buildroot_initramfs_sysroot)
+	cd $(pk_wrkdir) && rm -rf bbl libbbl.a payload.o bbl_payload
+	cd $(linux_wrkdir) && rm -rf bbl libbbl.a payload.o bbl_payload && cd usr && rm $(dir -A -I gen_init_cpio)
+	cd $(buildroot_initramfs_wrkdir) && rm -rf $(dir -A1 . | grep config) images
+	cd $(buildroot_rootfs_wrkdir) && rm -rf $(dir -A1 . | grep config) images
 
 clean-minimal:
 	rm -rf -- $(linux_wrkdir) $(pk_wrkdir) $(buildroot_initramfs_wrkdir) $(buildroot_initramfs_sysroot) $(buildroot_rootfs_wrkdir) $(rootfs) $(buildroot_initramfs_sysroot_stamp)
